@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "LLYShortVideoNoCacheViewController.h"
 
 @interface ViewController ()
+
 
 @end
 
@@ -16,8 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
 }
 
+- (IBAction)noCacheBtnClicked:(id)sender {
+    
+    LLYShortVideoNoCacheViewController *vc = [[LLYShortVideoNoCacheViewController alloc]init];
+    [self presentViewController:vc animated:YES completion:nil];
+    
+}
+- (IBAction)cacheBtnClicked:(id)sender {
+}
 
 @end
