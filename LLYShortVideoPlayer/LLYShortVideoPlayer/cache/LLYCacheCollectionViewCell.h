@@ -1,8 +1,8 @@
 //
-//  LLYCollectionViewCell.h
+//  LLYCacheCollectionViewCell.h
 //  LLYShortVideoPlayer
 //
-//  Created by lly on 2019/2/20.
+//  Created by lly on 2019/2/21.
 //  Copyright © 2019 lly. All rights reserved.
 //
 
@@ -10,10 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define OCWidth ([UIScreen mainScreen].bounds.size.width)
-#define OCHeight ([UIScreen mainScreen].bounds.size.height)
-
-@interface LLYCollectionViewCell : UICollectionViewCell
+@interface LLYCacheCollectionViewCell : UICollectionViewCell
 
 - (void)stop;
 - (void)play;

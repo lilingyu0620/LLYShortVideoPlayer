@@ -1,0 +1,15 @@
+//
+//  LLYShortVideoPlayer.pch
+//  LLYShortVideoPlayer
+//
+//  Created by lly on 2019/2/21.
+//  Copyright © 2019 lly. All rights reserved.
+//
+
+#ifndef LLYShortVideoPlayer_pch
+#define LLYShortVideoPlayer_pch
+
+#define OCWidth ([UIScreen mainScreen].bounds.size.width)
+#define OCHeight ([UIScreen mainScreen].bounds.size.height)
+
+#endif /* LLYShortVideoPlayer_pch */

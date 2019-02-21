@@ -16,7 +16,7 @@
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
 
-@property (nonatomic, assign) CGFloat perparePlayTime;
+@property (nonatomic, assign) CGFloat preparePlayTime;
 @property (nonatomic, assign) CGFloat startPlayTime;
 
 @property (nonatomic, strong) UILabel *startTimeLabel;
@@ -69,8 +69,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.mPlayer.currentItem];
     }
     
-    self.perparePlayTime = CFAbsoluteTimeGetCurrent();
-//    NSLog(@"perparePlayTime = %f",self.perparePlayTime);
+    self.preparePlayTime = CFAbsoluteTimeGetCurrent();
+//    NSLog(@"preparePlayTime = %f",self.preparePlayTime);
 }
 
 - (void)play{
@@ -118,7 +118,7 @@
             self.startPlayTime = CFAbsoluteTimeGetCurrent();
 //            NSLog(@"startPlayTime = %f",self.startPlayTime);
 //            NSLog(@"<<<<<<<<<<<<<<<<首屏时间：%f>>>>>>>>>>>>>",self.startPlayTime-self.perparePlayTime);
-            self.startTimeLabel.text = [NSString stringWithFormat:@"pathindex = %ld,首屏时间：%f",self.curIdx,self.startPlayTime-self.perparePlayTime];
+            self.startTimeLabel.text = [NSString stringWithFormat:@"pathindex = %ld,首屏时间：%f",self.curIdx,self.startPlayTime-self.preparePlayTime];
             
         }else if (playerItem.status == AVPlayerStatusFailed){//视频加载失败==发通知==无法播放==弹提示框，加载下一个视频等操作。
 //            NSLog(@"AVPlayerStatusFailed");

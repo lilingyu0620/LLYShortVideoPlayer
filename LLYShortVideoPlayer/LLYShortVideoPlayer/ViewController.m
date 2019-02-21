@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "LLYShortVideoNoCacheViewController.h"
+#import "LLYShortVideoCacheViewController.h"
 
 @interface ViewController ()
 
@@ -28,6 +29,10 @@
     
 }
 - (IBAction)cacheBtnClicked:(id)sender {
+    
+    LLYShortVideoCacheViewController *vc = [[LLYShortVideoCacheViewController alloc]init];
+    [self presentViewController:vc animated:YES completion:nil];
 }
+
 
 @end

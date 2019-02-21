@@ -15,9 +15,13 @@
 		0A2D6B15221D3068001281E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D6B14221D3068001281E8 /* main.m */; };
 		0A2D6B1F221D3068001281E8 /* LLYShortVideoPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D6B1E221D3068001281E8 /* LLYShortVideoPlayerTests.m */; };
 		0A2D6B2A221D3068001281E8 /* LLYShortVideoPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D6B29221D3068001281E8 /* LLYShortVideoPlayerUITests.m */; };
-		0A2D6B39221D35A8001281E8 /* LLYCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D6B38221D35A8001281E8 /* LLYCollectionViewCell.m */; };
 		0A2D6B3B221D3A4E001281E8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A2D6B3A221D3A4E001281E8 /* AVFoundation.framework */; };
-		0A2D6B3E221D8061001281E8 /* LLYShortVideoNoCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D6B3D221D8061001281E8 /* LLYShortVideoNoCacheViewController.m */; };
+		0A33BEC9221E86C30074F705 /* LLYShortVideoNoCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BEC5221E86C30074F705 /* LLYShortVideoNoCacheViewController.m */; };
+		0A33BECA221E86C30074F705 /* LLYCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BEC8221E86C30074F705 /* LLYCollectionViewCell.m */; };
+		0A33BECE221E882F0074F705 /* LLYShortVideoCacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BECD221E882F0074F705 /* LLYShortVideoCacheViewController.m */; };
+		0A33BED1221E896F0074F705 /* LLYCacheCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED0221E896F0074F705 /* LLYCacheCollectionViewCell.m */; };
+		0A33BED5221E8ED20074F705 /* LLYShortVideoResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED4221E8ED20074F705 /* LLYShortVideoResourceLoader.m */; };
+		0A33BED9221E9A780074F705 /* LLYHttpSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED8221E9A780074F705 /* LLYHttpSessionManager.m */; };
 		55A2D4CC87A3F50820B11388 /* libPods-LLYShortVideoPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 478E0519A56F26673D4E2F94 /* libPods-LLYShortVideoPlayer.a */; };
 /* End PBXBuildFile section */
 
@@ -55,11 +59,20 @@
 		0A2D6B25221D3068001281E8 /* LLYShortVideoPlayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LLYShortVideoPlayerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A2D6B29221D3068001281E8 /* LLYShortVideoPlayerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoPlayerUITests.m; sourceTree = "<group>"; };
 		0A2D6B2B221D3068001281E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0A2D6B37221D35A8001281E8 /* LLYCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYCollectionViewCell.h; sourceTree = "<group>"; };
-		0A2D6B38221D35A8001281E8 /* LLYCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYCollectionViewCell.m; sourceTree = "<group>"; };
 		0A2D6B3A221D3A4E001281E8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		0A2D6B3C221D8061001281E8 /* LLYShortVideoNoCacheViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoNoCacheViewController.h; sourceTree = "<group>"; };
-		0A2D6B3D221D8061001281E8 /* LLYShortVideoNoCacheViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoNoCacheViewController.m; sourceTree = "<group>"; };
+		0A33BEC5221E86C30074F705 /* LLYShortVideoNoCacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoNoCacheViewController.m; sourceTree = "<group>"; };
+		0A33BEC6221E86C30074F705 /* LLYCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLYCollectionViewCell.h; sourceTree = "<group>"; };
+		0A33BEC7221E86C30074F705 /* LLYShortVideoNoCacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoNoCacheViewController.h; sourceTree = "<group>"; };
+		0A33BEC8221E86C30074F705 /* LLYCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLYCollectionViewCell.m; sourceTree = "<group>"; };
+		0A33BECC221E882F0074F705 /* LLYShortVideoCacheViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoCacheViewController.h; sourceTree = "<group>"; };
+		0A33BECD221E882F0074F705 /* LLYShortVideoCacheViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoCacheViewController.m; sourceTree = "<group>"; };
+		0A33BECF221E896F0074F705 /* LLYCacheCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYCacheCollectionViewCell.h; sourceTree = "<group>"; };
+		0A33BED0221E896F0074F705 /* LLYCacheCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYCacheCollectionViewCell.m; sourceTree = "<group>"; };
+		0A33BED2221E8A8F0074F705 /* LLYShortVideoPlayer.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoPlayer.pch; sourceTree = "<group>"; };
+		0A33BED3221E8ED20074F705 /* LLYShortVideoResourceLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoResourceLoader.h; sourceTree = "<group>"; };
+		0A33BED4221E8ED20074F705 /* LLYShortVideoResourceLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoResourceLoader.m; sourceTree = "<group>"; };
+		0A33BED7221E9A780074F705 /* LLYHttpSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLYHttpSessionManager.h; sourceTree = "<group>"; };
+		0A33BED8221E9A780074F705 /* LLYHttpSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLYHttpSessionManager.m; sourceTree = "<group>"; };
 		478E0519A56F26673D4E2F94 /* libPods-LLYShortVideoPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LLYShortVideoPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BA17F6DFB793FAA70B6511 /* Pods-LLYShortVideoPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LLYShortVideoPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LLYShortVideoPlayer/Pods-LLYShortVideoPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		BAB224A1BF3D8151DF5A4936 /* Pods-LLYShortVideoPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LLYShortVideoPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-LLYShortVideoPlayer/Pods-LLYShortVideoPlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +130,9 @@
 		0A2D6B04221D3066001281E8 /* LLYShortVideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				0A33BED6221E9A780074F705 /* NetManager */,
+				0A33BECB221E87880074F705 /* cache */,
+				0A33BEC4221E86970074F705 /* nocache */,
 				0A2D6B05221D3066001281E8 /* AppDelegate.h */,
 				0A2D6B06221D3066001281E8 /* AppDelegate.m */,
 				0A2D6B08221D3066001281E8 /* ViewController.h */,
@@ -126,10 +142,7 @@
 				0A2D6B10221D3068001281E8 /* LaunchScreen.storyboard */,
 				0A2D6B13221D3068001281E8 /* Info.plist */,
 				0A2D6B14221D3068001281E8 /* main.m */,
-				0A2D6B37221D35A8001281E8 /* LLYCollectionViewCell.h */,
-				0A2D6B38221D35A8001281E8 /* LLYCollectionViewCell.m */,
-				0A2D6B3C221D8061001281E8 /* LLYShortVideoNoCacheViewController.h */,
-				0A2D6B3D221D8061001281E8 /* LLYShortVideoNoCacheViewController.m */,
+				0A33BED2221E8A8F0074F705 /* LLYShortVideoPlayer.pch */,
 			);
 			path = LLYShortVideoPlayer;
 			sourceTree = "<group>";
@@ -150,6 +163,39 @@
 				0A2D6B2B221D3068001281E8 /* Info.plist */,
 			);
 			path = LLYShortVideoPlayerUITests;
+			sourceTree = "<group>";
+		};
+		0A33BEC4221E86970074F705 /* nocache */ = {
+			isa = PBXGroup;
+			children = (
+				0A33BEC6221E86C30074F705 /* LLYCollectionViewCell.h */,
+				0A33BEC8221E86C30074F705 /* LLYCollectionViewCell.m */,
+				0A33BEC7221E86C30074F705 /* LLYShortVideoNoCacheViewController.h */,
+				0A33BEC5221E86C30074F705 /* LLYShortVideoNoCacheViewController.m */,
+			);
+			path = nocache;
+			sourceTree = "<group>";
+		};
+		0A33BECB221E87880074F705 /* cache */ = {
+			isa = PBXGroup;
+			children = (
+				0A33BECC221E882F0074F705 /* LLYShortVideoCacheViewController.h */,
+				0A33BECD221E882F0074F705 /* LLYShortVideoCacheViewController.m */,
+				0A33BECF221E896F0074F705 /* LLYCacheCollectionViewCell.h */,
+				0A33BED0221E896F0074F705 /* LLYCacheCollectionViewCell.m */,
+				0A33BED3221E8ED20074F705 /* LLYShortVideoResourceLoader.h */,
+				0A33BED4221E8ED20074F705 /* LLYShortVideoResourceLoader.m */,
+			);
+			path = cache;
+			sourceTree = "<group>";
+		};
+		0A33BED6221E9A780074F705 /* NetManager */ = {
+			isa = PBXGroup;
+			children = (
+				0A33BED7221E9A780074F705 /* LLYHttpSessionManager.h */,
+				0A33BED8221E9A780074F705 /* LLYHttpSessionManager.m */,
+			);
+			path = NetManager;
 			sourceTree = "<group>";
 		};
 		28F323BF5C67FEDE84277603 /* Pods */ = {
@@ -327,10 +373,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A2D6B0A221D3066001281E8 /* ViewController.m in Sources */,
+				0A33BED1221E896F0074F705 /* LLYCacheCollectionViewCell.m in Sources */,
 				0A2D6B15221D3068001281E8 /* main.m in Sources */,
-				0A2D6B3E221D8061001281E8 /* LLYShortVideoNoCacheViewController.m in Sources */,
-				0A2D6B39221D35A8001281E8 /* LLYCollectionViewCell.m in Sources */,
+				0A33BECE221E882F0074F705 /* LLYShortVideoCacheViewController.m in Sources */,
 				0A2D6B07221D3066001281E8 /* AppDelegate.m in Sources */,
+				0A33BEC9221E86C30074F705 /* LLYShortVideoNoCacheViewController.m in Sources */,
+				0A33BED9221E9A780074F705 /* LLYHttpSessionManager.m in Sources */,
+				0A33BECA221E86C30074F705 /* LLYCollectionViewCell.m in Sources */,
+				0A33BED5221E8ED20074F705 /* LLYShortVideoResourceLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +554,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PW2BL84NY9;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LLYShortVideoPlayer/LLYShortVideoPlayer.pch";
 				INFOPLIST_FILE = LLYShortVideoPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -523,6 +574,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PW2BL84NY9;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LLYShortVideoPlayer/LLYShortVideoPlayer.pch";
 				INFOPLIST_FILE = LLYShortVideoPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
