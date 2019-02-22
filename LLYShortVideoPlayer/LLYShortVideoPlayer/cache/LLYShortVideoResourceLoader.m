@@ -7,8 +7,8 @@
 //
 
 #import "LLYShortVideoResourceLoader.h"
-#import <AFNetworking.h>
 #import "LLYHttpSessionManager.h"
+#import "LLYShortVideoDownloader.h"
 
 @interface LLYShortVideoResourceLoader ()<AVAssetResourceLoaderDelegate>
 
@@ -55,7 +55,7 @@
 
 - (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest {
     if (!loadingRequest.isFinished) {
-    };
+    }
 }
 
 #pragma mark - Private Method
@@ -68,30 +68,17 @@
 
 - (void)p_startLoading{
     
-    [[LLYHttpSessionManager shareInstance] setDidReceiveResponseBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSURLResponse *response) {
-        self.expectedSize = response.expectedContentLength;
-        self.receivedSize = 0;
-        self.respondedSize = 0;
-    }];
-    
-    [[LLYHttpSessionManager shareInstance] setDidReceiveDataBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) {
-        self.receivedSize += data.length;
-        [self.tmpData appendData:data];
+    [[LLYShortVideoDownloader shareInstance] downloadWithUrl:self.url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize) {
         
-        [self p_handleLoadingRequests];
-
-    }];
-    
-    [[LLYHttpSessionManager shareInstance] requestVIDEOWithMethod:LLYHttpMethod_GET urlString:self.url parameters:nil progress:^(NSProgress * _Nullable downloadProgress) {
-        NSLog(@"downloadProgress = %f",downloadProgress.completedUnitCount*1.00000/downloadProgress.totalUnitCount*1.00000);
-    } success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject) {
-        
-        NSLog(@"success");
+        self.receivedSize = receivedSize;
+        self.expectedSize = expectedSize;
         
         [self p_handleLoadingRequests];
         
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error) {
-        
+    } completionBlock:^(NSError *error) {
+        if (!error) {
+            [self p_handleLoadingRequests];
+        }
     }];
     
 }
@@ -118,12 +105,15 @@
     AVAssetResourceLoadingContentInformationRequest *contentInfomationRequest = loadingRequest.contentInformationRequest;
     if (contentInfomationRequest && !contentInfomationRequest.contentType && self.expectedSize > 0) {
         NSString *fileExtension = [self.url pathExtension];
+        
         NSString *UTI = (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExtension, NULL);
+        
         NSString *contentTypeS = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)UTI, kUTTagClassMIMEType);
         if (!contentTypeS) {
             contentTypeS = @"application/octet-stream";
         }
         NSString *mimetype = contentTypeS;
+        
         CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(mimetype), NULL);
         contentInfomationRequest.byteRangeAccessSupported = YES;
         contentInfomationRequest.contentType = CFBridgingRelease(contentType);
