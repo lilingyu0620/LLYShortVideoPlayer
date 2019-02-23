@@ -63,7 +63,7 @@
     [[LLYHttpSessionManager shareInstance] setDidReceiveDataBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) {
         self.receivedSize += data.length;
         if (self.progressBlock) {
-            self.progressBlock(self.receivedSize, self.expectedSize);
+            self.progressBlock(self.receivedSize, self.expectedSize,data);
         }
     }];
     

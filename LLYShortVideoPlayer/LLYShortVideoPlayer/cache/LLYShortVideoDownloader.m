@@ -7,6 +7,7 @@
 //
 
 #import "LLYShortVideoDownloader.h"
+#import "LLYShortVideoCacher.h"
 
 @interface LLYShortVideoDownloader ()
 
@@ -41,10 +42,14 @@
               progressBlock:(LLYShortVideoDownloadProgressBlock)progressBlock
             completionBlock:(LLYShortVideoDownloadCompletionBlock)completionBlock{
     
-    LLYShortVideoDownloadOperation *operation = [[LLYShortVideoDownloadOperation alloc]initWithUrl:url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize) {
+    [[LLYShortVideoCacher shareInstance] createCacheFilePathWithName:[NSURL URLWithString:url]];
+    
+    LLYShortVideoDownloadOperation *operation = [[LLYShortVideoDownloadOperation alloc]initWithUrl:url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize,NSData *data) {
+        
+        [[LLYShortVideoCacher shareInstance] appendWithData:data fileUrl:[NSURL URLWithString:url]];
         
         if (progressBlock) {
-            progressBlock(receivedSize,expectedSize);
+            progressBlock(receivedSize,expectedSize,data);
         }
         
     } completionBlock:^(NSError *error) {

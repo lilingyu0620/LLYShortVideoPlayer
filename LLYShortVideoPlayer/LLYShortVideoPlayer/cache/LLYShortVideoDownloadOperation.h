@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void(^LLYShortVideoDownloadProgressBlock)(NSInteger receivedSize, NSInteger expectedSize);
+typedef void(^LLYShortVideoDownloadProgressBlock)(NSInteger receivedSize, NSInteger expectedSize,NSData *data);
 typedef void(^LLYShortVideoDownloadCompletionBlock)(NSError *error);
 
 NS_ASSUME_NONNULL_BEGIN

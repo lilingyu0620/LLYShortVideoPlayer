@@ -9,6 +9,7 @@
 #import "LLYShortVideoResourceLoader.h"
 #import "LLYHttpSessionManager.h"
 #import "LLYShortVideoDownloader.h"
+#import "LLYShortVideoCacher.h"
 
 @interface LLYShortVideoResourceLoader ()<AVAssetResourceLoaderDelegate>
 
@@ -68,7 +69,7 @@
 
 - (void)p_startLoading{
     
-    [[LLYShortVideoDownloader shareInstance] downloadWithUrl:self.url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize) {
+    [[LLYShortVideoDownloader shareInstance] downloadWithUrl:self.url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize,NSData *data) {
         
         self.receivedSize = receivedSize;
         self.expectedSize = expectedSize;
@@ -144,7 +145,7 @@
     
     NSData *playData = [NSData data];
     if (realPlaySize > 2){
-        playData = [self.tmpData subdataWithRange:NSMakeRange(startOffset, canPlaySize)];
+        playData = [[LLYShortVideoCacher shareInstance] cacheDataFromOffset:startOffset length:canPlaySize fileUrl:[NSURL URLWithString:self.url]];
     }
     
     if (playData) {
