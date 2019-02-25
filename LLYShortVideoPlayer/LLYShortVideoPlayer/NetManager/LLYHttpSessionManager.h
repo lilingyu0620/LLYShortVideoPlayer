@@ -81,4 +81,11 @@ typedef NS_ENUM(NSUInteger, LLYHttpFileType) {
                                   destination:(nullable NSURL * _Nullable(^)(NSURL * _Nullable targetPath, NSURLResponse * _Nullable response))destination
                             completionHandler:(nullable void (^)(NSURLResponse * _Nullable response, NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
+
+- (nullable NSURLSessionTask *)requestVIDEOWithRequest:(nullable NSMutableURLRequest *)request
+                                           parameters:(nullable id)parameters
+                                             progress:(nullable void (^)(NSProgress * _Nullable downloadProgress))downloadProgress
+                                              success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success
+                                              failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure;
+
 @end

@@ -56,7 +56,41 @@
     return [self.diskCache dataFromOffset:offset length:length fileName:[self fileNameWithUrl:fileUrl]];
 }
 
+- (BOOL)isCacheCompletedWithUrl:(NSURL *)url{
+    
+    NSString *fileName = [self fileNameWithUrl:url];
+    return [self.diskCache fileExistAtFinalWithName:fileName];
+}
+
+- (NSInteger)finalCachedSizeWithUrl:(NSURL *)url{
+    
+    NSString *fileName = [self fileNameWithUrl:url];
+    return [self.diskCache finalCachedSizeWithName:fileName];
+}
+
+- (NSInteger)tempCachedSizeWithUrl:(NSURL *)url{
+    
+    NSString *fileName = [self fileNameWithUrl:url];
+    return [self.diskCache tempCachedSizeWithName:fileName];
+    
+}
+
+- (void)cacheCompletedWithUrl:(NSURL *)url{
+    
+    NSString *fileName = [self fileNameWithUrl:url];
+    [self.diskCache moveTempFileToFinalWithName:fileName];
+    
+}
+
+- (NSURL *)finalFilePathWithName:(NSURL *)fileUrl{
+    
+    NSString *filePath = [self.diskCache finalFilePathWithName:[self fileNameWithUrl:fileUrl]];
+    return [NSURL fileURLWithPath:filePath];
+    
+}
+
 #pragma mark - private
+
 - (NSString *)fileNameWithUrl:(NSURL *)fileUrl {
 //    NSString *fileName = [_urlFileNameCache objectForKey:url];
     NSString *fileName;
@@ -79,4 +113,5 @@
             result[12], result[13], result[14], result[15]
             ];
 }
+
 @end

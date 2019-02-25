@@ -24,6 +24,7 @@
 		0A33BED1221E896F0074F705 /* LLYCacheCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED0221E896F0074F705 /* LLYCacheCollectionViewCell.m */; };
 		0A33BED5221E8ED20074F705 /* LLYShortVideoResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED4221E8ED20074F705 /* LLYShortVideoResourceLoader.m */; };
 		0A33BED9221E9A780074F705 /* LLYHttpSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A33BED8221E9A780074F705 /* LLYHttpSessionManager.m */; };
+		0A37B54C2223D17800235D5D /* LLYShortVideoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A37B54B2223D17800235D5D /* LLYShortVideoManager.m */; };
 		0A3B6616222120180079ACE4 /* LLYShortVideoCacheConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B6615222120180079ACE4 /* LLYShortVideoCacheConfig.m */; };
 		0A3B6619222121890079ACE4 /* LLYShortViedoDiskCacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B6618222121890079ACE4 /* LLYShortViedoDiskCacher.m */; };
 		0A3B661C22212A610079ACE4 /* LLYFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3B661B22212A610079ACE4 /* LLYFileManager.m */; };
@@ -83,6 +84,8 @@
 		0A33BED4221E8ED20074F705 /* LLYShortVideoResourceLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoResourceLoader.m; sourceTree = "<group>"; };
 		0A33BED7221E9A780074F705 /* LLYHttpSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLYHttpSessionManager.h; sourceTree = "<group>"; };
 		0A33BED8221E9A780074F705 /* LLYHttpSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLYHttpSessionManager.m; sourceTree = "<group>"; };
+		0A37B54A2223D17800235D5D /* LLYShortVideoManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoManager.h; sourceTree = "<group>"; };
+		0A37B54B2223D17800235D5D /* LLYShortVideoManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoManager.m; sourceTree = "<group>"; };
 		0A3B6614222120180079ACE4 /* LLYShortVideoCacheConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortVideoCacheConfig.h; sourceTree = "<group>"; };
 		0A3B6615222120180079ACE4 /* LLYShortVideoCacheConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLYShortVideoCacheConfig.m; sourceTree = "<group>"; };
 		0A3B6617222121890079ACE4 /* LLYShortViedoDiskCacher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLYShortViedoDiskCacher.h; sourceTree = "<group>"; };
@@ -215,6 +218,8 @@
 				0A3B661B22212A610079ACE4 /* LLYFileManager.m */,
 				0A3B661D2221345B0079ACE4 /* LLYShortVideoCacher.h */,
 				0A3B661E2221345B0079ACE4 /* LLYShortVideoCacher.m */,
+				0A37B54A2223D17800235D5D /* LLYShortVideoManager.h */,
+				0A37B54B2223D17800235D5D /* LLYShortVideoManager.m */,
 			);
 			path = cache;
 			sourceTree = "<group>";
@@ -406,6 +411,7 @@
 				0A2D6B0A221D3066001281E8 /* ViewController.m in Sources */,
 				0A33BED1221E896F0074F705 /* LLYCacheCollectionViewCell.m in Sources */,
 				0A3B661C22212A610079ACE4 /* LLYFileManager.m in Sources */,
+				0A37B54C2223D17800235D5D /* LLYShortVideoManager.m in Sources */,
 				0A2D6B15221D3068001281E8 /* main.m in Sources */,
 				0A3B6616222120180079ACE4 /* LLYShortVideoCacheConfig.m in Sources */,
 				0A3B661F2221345B0079ACE4 /* LLYShortVideoCacher.m in Sources */,

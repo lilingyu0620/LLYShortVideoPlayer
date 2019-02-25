@@ -200,6 +200,25 @@
     return task;
 }
 
-
-
+- (nullable NSURLSessionTask *)requestVIDEOWithRequest:(nullable NSMutableURLRequest *)request
+                                           parameters:(nullable id)parameters
+                                             progress:(nullable void (^)(NSProgress * _Nullable downloadProgress))downloadProgress
+                                              success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, id _Nullable responseObject))success
+                                              failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError * _Nullable error))failure{
+    
+    self.fileType = LLYHttpFileType_VIDEO;
+    
+    NSURLSessionTask *task = [_httpSessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:downloadProgress completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (!error) {
+            success(nil,responseObject);
+        }
+        else{
+            failure(nil,error);
+        }
+    }];
+    [task resume];
+    
+    return task;
+    
+}
 @end

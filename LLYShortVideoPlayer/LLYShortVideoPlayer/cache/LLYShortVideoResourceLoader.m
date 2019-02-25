@@ -8,8 +8,8 @@
 
 #import "LLYShortVideoResourceLoader.h"
 #import "LLYHttpSessionManager.h"
-#import "LLYShortVideoDownloader.h"
 #import "LLYShortVideoCacher.h"
+#import "LLYShortVideoManager.h"
 
 @interface LLYShortVideoResourceLoader ()<AVAssetResourceLoaderDelegate>
 
@@ -36,9 +36,11 @@
     self.tmpData = [NSMutableData data];
     self.loadingRequestArray = [NSMutableArray array];
     
-    [self p_startLoading];
+    if (![[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]){
+        [self p_startLoading];
+    }
     
-    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self unRecognizerUrl] options:nil];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self resourceURL] options:nil];
     [asset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
     AVPlayerItem *item = [AVPlayerItem playerItemWithAsset:asset];
     return item;
@@ -69,19 +71,20 @@
 
 - (void)p_startLoading{
     
-    [[LLYShortVideoDownloader shareInstance] downloadWithUrl:self.url progressBlock:^(NSInteger receivedSize, NSInteger expectedSize,NSData *data) {
+    [[LLYShortVideoManager shareInstance] loadVideoWithUrl:[NSURL URLWithString:self.url] progress:^(NSInteger receivedSize, NSInteger expectedSize, NSData *data) {
         
         self.receivedSize = receivedSize;
         self.expectedSize = expectedSize;
         
         [self p_handleLoadingRequests];
+
+    } completion:^(NSError *error) {
         
-    } completionBlock:^(NSError *error) {
         if (!error) {
             [self p_handleLoadingRequests];
         }
+
     }];
-    
 }
 
 - (void)p_handleLoadingRequests{
@@ -148,7 +151,7 @@
         playData = [[LLYShortVideoCacher shareInstance] cacheDataFromOffset:startOffset length:canPlaySize fileUrl:[NSURL URLWithString:self.url]];
     }
     
-    if (playData) {
+    if (playData.length > 0) {
         [dataRequest respondWithData:playData];
     }
     
@@ -163,6 +166,16 @@
         
 }
 
+- (NSURL *)resourceURL{
+    
+    if ([[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]) {
+        return [[LLYShortVideoCacher shareInstance] finalFilePathWithName:[NSURL URLWithString:self.url]];
+    }
+    else{
+        return [self unRecognizerUrl];
+    }
+    
+}
 
 
 @end

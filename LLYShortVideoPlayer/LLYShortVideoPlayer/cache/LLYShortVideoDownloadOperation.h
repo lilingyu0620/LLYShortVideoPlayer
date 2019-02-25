@@ -8,14 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void(^LLYShortVideoDownloadProgressBlock)(NSInteger receivedSize, NSInteger expectedSize,NSData *data);
-typedef void(^LLYShortVideoDownloadCompletionBlock)(NSError *error);
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LLYShortVideoDownloadOperation : NSOperation
 
-- (instancetype)initWithUrl:(NSString *)urlStr
+- (instancetype)initWithRequest:(NSMutableURLRequest *)request
               progressBlock:(LLYShortVideoDownloadProgressBlock)progressBlock
             completionBlock:(LLYShortVideoDownloadCompletionBlock)completionBlock;
 

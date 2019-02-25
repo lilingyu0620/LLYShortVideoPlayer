@@ -32,6 +32,7 @@ static NSString * const kTempDirectoryName = @"ShortVideoTemp";
         self.path = path;
         self.finalPath = [self.path stringByAppendingPathComponent:kFinalDirectoryName];
         self.tempPath = [self.path stringByAppendingPathComponent:kTempDirectoryName];
+        self.fileHandleDic = [NSMutableDictionary dictionary];
         
         //创建目录
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -76,7 +77,7 @@ static NSString * const kTempDirectoryName = @"ShortVideoTemp";
     NSFileHandle *fileHandle = self.fileHandleDic[fileName];
     if (!fileHandle) {
         fileHandle = [NSFileHandle fileHandleForWritingAtPath:filePath];
-        self.fileHandleDic[filePath] = fileHandle;
+        self.fileHandleDic[fileName] = fileHandle;
     }
     
     [fileHandle seekToEndOfFile];
@@ -107,13 +108,91 @@ static NSString * const kTempDirectoryName = @"ShortVideoTemp";
     
     NSError *error = nil;
     NSData *data = [NSData dataWithContentsOfFile:targetFilePath options:NSDataReadingMappedIfSafe error:&error];
-    if (!error && data.length > (length+offset)) {
+    if (!error && data.length >= (length+offset)) {
         return [data subdataWithRange:NSMakeRange(offset, length)];
     }
     else{
         return nil;
     }
     
+}
+
+- (BOOL)fileExistAtFinalWithName:(NSString *)fileName{
+    
+    if (fileName.length <= 0) {
+        return NO;
+    }
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *filePath = [self.finalPath stringByAppendingPathComponent:fileName];
+    return [fileManager fileExistsAtPath:filePath];
+    
+}
+
+- (NSInteger)finalCachedSizeWithName:(NSString *)fileName{
+    
+    if (fileName.length <= 0) {
+        return 0;
+    }
+    NSString *filePath = [self.finalPath stringByAppendingPathComponent:fileName];
+    return [self fileSizeWithPath:filePath];
+    
+}
+
+- (NSInteger)tempCachedSizeWithName:(NSString *)fileName{
+    
+    if (fileName.length <= 0) {
+        return 0;
+    }
+    NSString *filePath = [self.tempPath stringByAppendingPathComponent:fileName];
+    return [self fileSizeWithPath:filePath];
+}
+
+- (NSInteger)fileSizeWithPath:(NSString *)filePath {
+    
+    if(!(filePath.length > 0)) {
+        return 0;
+    }
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    if(![fileManager fileExistsAtPath:filePath]) {
+        return 0;
+    }
+    NSError *error = nil;
+    NSInteger fileSize = 0;
+    NSDictionary *fileDict = [fileManager attributesOfItemAtPath:filePath error:&error];
+    if (!error && fileDict) {
+        fileSize = (NSInteger)[fileDict fileSize];
+    }
+    
+    return fileSize;
+}
+
+- (void)moveTempFileToFinalWithName:(NSString *)fileName{
+    
+    if (fileName.length <= 0) {
+        return;
+    }
+    
+    NSString *tempFilePath = [self.tempPath stringByAppendingPathComponent:fileName];
+    NSString *finalFilePath = [self.finalPath stringByAppendingPathComponent:fileName];
+    NSError *error = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+//    [fileManager moveItemAtPath:tempFilePath toPath:finalFilePath error:&error];
+    [fileManager copyItemAtPath:tempFilePath toPath:finalFilePath error:&error];
+    
+    if (!error) {
+        [self.fileHandleDic removeObjectForKey:fileName];
+    }
+    
+}
+
+- (NSString *)finalFilePathWithName:(NSString *)fileName{
+    
+    if (fileName.length <= 0) {
+        return nil;
+    }
+    return [self.finalPath stringByAppendingPathComponent:fileName];
 }
 
 @end

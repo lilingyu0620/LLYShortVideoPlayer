@@ -20,6 +20,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)dataFromOffset:(NSUInteger)offset length:(NSUInteger)length fileName:(NSString *)fileName;
 
+- (BOOL)fileExistAtFinalWithName:(NSString *)fileName;
+
+- (NSInteger)finalCachedSizeWithName:(NSString *)fileName;
+
+- (NSInteger)tempCachedSizeWithName:(NSString *)fileName;
+
+- (void)moveTempFileToFinalWithName:(NSString *)fileName;
+
+- (NSString *)finalFilePathWithName:(NSString *)fileName;
+
 @end
 
 NS_ASSUME_NONNULL_END
