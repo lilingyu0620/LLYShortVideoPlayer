@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LLYShortVideoResourceLoader : NSObject
 
+@property (nonatomic, copy) NSString *url;
+
 - (AVPlayerItem *)playerItemWithUrl:(NSString *)urlStr;
 
 @end

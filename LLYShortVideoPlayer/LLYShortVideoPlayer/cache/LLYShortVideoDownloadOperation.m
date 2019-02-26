@@ -53,29 +53,39 @@
 
 - (void)start{
     
-    [_lock lock];
+//    [_lock lock];
     
     [[LLYHttpSessionManager shareInstance] setDidReceiveResponseBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSURLResponse *response) {
         self.expectedSize = response.expectedContentLength;
         self.receivedSize = 0;
+        
+        [self.lock lock];
         [[LLYShortVideoCacher shareInstance] createCacheFilePathWithName:self.request.URL];
+        [self.lock unlock];
     }];
     
     [[LLYHttpSessionManager shareInstance] setDidReceiveDataBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSData *data) {
         self.receivedSize += data.length;
+        
+        [self.lock lock];
+        [[LLYShortVideoCacher shareInstance] appendWithData:data fileUrl:self.request.URL];
+        [self.lock unlock];
+        
         if (self.progressBlock) {
             self.progressBlock(self.receivedSize, self.expectedSize,data);
         }
     }];
     
     self.task = [[LLYHttpSessionManager shareInstance] requestVIDEOWithRequest:self.request parameters:nil progress:^(NSProgress * _Nullable downloadProgress) {
-        NSLog(@"downloadProgress = %f",downloadProgress.completedUnitCount*1.00000/downloadProgress.totalUnitCount*1.00000);
+//        NSLog(@"downloadProgress = %f",downloadProgress.completedUnitCount*1.00000/downloadProgress.totalUnitCount*1.00000);
     } success:^(NSURLSessionDataTask * _Nullable task, id  _Nullable responseObject) {
         
         NSLog(@"success");
         
         //下载完成 将文件保存在final文件夹
-        [[LLYShortVideoCacher shareInstance] cacheCompletedWithUrl:self.request.URL];
+        if ([[LLYShortVideoCacher shareInstance] tempCachedSizeWithUrl:self.request.URL] >= self.expectedSize && ![[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:self.request.URL]) {
+            [[LLYShortVideoCacher shareInstance] cacheCompletedWithUrl:self.request.URL];
+        }
         
         if (self.completeBlock) {
             self.completeBlock(nil);
@@ -91,7 +101,7 @@
 
     }];
     
-    [_lock unlock];
+//    [_lock unlock];
 }
 
 #pragma mark - Getter/Setter

@@ -12,9 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LLYCacheCollectionViewCell : UICollectionViewCell
 
-- (void)stop;
+@property (nonatomic, assign) NSInteger curIdx;
+
+- (void)playWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
+- (void)stopWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
+
 - (void)play;
-- (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
 
 @end
 

@@ -66,7 +66,7 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LLYCacheCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LLYCacheCollectionViewCell" forIndexPath:indexPath];
-    [cell configWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
+    [cell playWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
     return cell;
 }
 
@@ -77,6 +77,9 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [((LLYCacheCollectionViewCell *)cell) stopWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
+    
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -109,10 +112,11 @@
     //    NSLog(@"curVisibleCell = %@",self.curVisibleCell);
     
     if (self.lastVisibleCell != self.curVisibleCell) {
-        [self.lastVisibleCell stop];
+//        [self.curVisibleCell playWithUrl:self.dataSourceArray[yIdx] idx:yIdx];
         [self.curVisibleCell play];
     }
     
+    [[LLYShortVideoManager shareInstance] preloadVideoWithArray:[self p_preloadUrlsWithIndex:yIdx]];
 }
 
 #pragma mark - Status Bar
@@ -174,15 +178,29 @@
 #pragma mark - Private Method
 
 - (void)p_startPlayer{
-    
     self.curVisibleCell = (LLYCacheCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//    [self.curVisibleCell playWithUrl:self.dataSourceArray.firstObject idx:0];
     [self.curVisibleCell play];
-    
 }
 
 - (void)backBtnClicked:(id)sender{
-    [self.curVisibleCell stop];
+    [self.curVisibleCell stopWithUrl:self.dataSourceArray[self.curVisibleCell.curIdx] idx:self.curVisibleCell.curIdx];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (NSArray *)p_preloadUrlsWithIndex:(NSInteger)idx{
+
+    NSMutableArray *preArray = [NSMutableArray array];
+    
+    if (idx > 0) {
+        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx-1]]];
+    }
+    
+    if (idx < self.dataSourceArray.count - 1) {
+        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx +1]]];
+    }
+    
+    return preArray;
 }
 
 @end

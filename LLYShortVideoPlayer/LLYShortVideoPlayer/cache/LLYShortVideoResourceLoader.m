@@ -10,16 +10,12 @@
 #import "LLYHttpSessionManager.h"
 #import "LLYShortVideoCacher.h"
 #import "LLYShortVideoManager.h"
+#import "AVAssetResourceLoadingDataRequest+ShortVideoCache.h"
 
 @interface LLYShortVideoResourceLoader ()<AVAssetResourceLoaderDelegate>
 
-@property (nonatomic, strong) NSString *url;
-
 @property (nonatomic, assign) NSInteger expectedSize;
 @property (nonatomic, assign) NSInteger receivedSize;
-
-@property (nonatomic, strong) NSMutableData *tmpData;
-@property (nonatomic, assign) NSInteger respondedSize;
 
 @property (nonatomic, strong) NSMutableArray<AVAssetResourceLoadingRequest *> *loadingRequestArray;
 
@@ -33,10 +29,9 @@
 //    然而如果我们把URL改成如（sevenuncle://xxx.mp4）的时候，由于AVURLAsset无法识别出该协议，就会转向资源加载代理对象询问数据如何加载,此时就会调用AVAssetResourceLoaderDelegate 协议里的下述方法：
     
     self.url = urlStr;
-    self.tmpData = [NSMutableData data];
     self.loadingRequestArray = [NSMutableArray array];
     
-    if (![[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]){
+    if (![[LLYShortVideoManager shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]) {
         [self p_startLoading];
     }
     
@@ -129,7 +124,7 @@
     
     AVAssetResourceLoadingDataRequest *dataRequest = loadingRequest.dataRequest;
     
-    NSLog(@"requestedLength = %ld",dataRequest.requestedLength);
+//    NSLog(@"requestedLength = %ld",dataRequest.requestedLength);
     
     NSInteger startOffset = dataRequest.requestedOffset;
     if (dataRequest.currentOffset != 0) {
@@ -148,16 +143,15 @@
     
     NSData *playData = [NSData data];
     if (realPlaySize > 2){
-        playData = [[LLYShortVideoCacher shareInstance] cacheDataFromOffset:startOffset length:canPlaySize fileUrl:[NSURL URLWithString:self.url]];
+        playData = [[LLYShortVideoManager shareInstance] cacheDataFromOffset:startOffset length:canPlaySize withUrl:[NSURL URLWithString:self.url]];
     }
     
     if (playData.length > 0) {
         [dataRequest respondWithData:playData];
     }
     
-    self.respondedSize += realPlaySize;
-    
-    if (self.respondedSize >= dataRequest.requestedLength) {
+    dataRequest.respondedSize += realPlaySize;
+    if (dataRequest.respondedSize >= dataRequest.requestedLength) {
         return YES;
     }
     else{
@@ -168,8 +162,8 @@
 
 - (NSURL *)resourceURL{
     
-    if ([[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]) {
-        return [[LLYShortVideoCacher shareInstance] finalFilePathWithName:[NSURL URLWithString:self.url]];
+    if ([[LLYShortVideoManager shareInstance] isCacheCompletedWithUrl:[NSURL URLWithString:self.url]]) {
+        return [[LLYShortVideoManager shareInstance] finalFilePathWithName:[NSURL URLWithString:self.url]];
     }
     else{
         return [self unRecognizerUrl];

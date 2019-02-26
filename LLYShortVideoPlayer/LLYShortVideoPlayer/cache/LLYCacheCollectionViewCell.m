@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) UILabel *startTimeLabel;
 
-@property (nonatomic, assign) NSInteger curIdx;
+@property (nonatomic, strong) LLYShortVideoResourceLoader *loader;
 
 @end
 
@@ -48,17 +48,19 @@
         make.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self);
     }];
-    
+
 }
 
 
-- (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
+- (void)playWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
     
     self.curIdx = idx;
     
-    LLYShortVideoResourceLoader *loader = [[LLYShortVideoResourceLoader alloc]init];
+    NSLog(@"self.curIdx = %ld",(long)self.curIdx);
     
-    self.playerItem = [loader playerItemWithUrl:urlStr];
+    self.loader = [[LLYShortVideoResourceLoader alloc]init];
+    
+    self.playerItem = [self.loader playerItemWithUrl:urlStr];
     self.mPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];
     self.playerLayer.player = self.mPlayer;
     
@@ -78,19 +80,38 @@
 
 - (void)play{
     
-    [self.mPlayer play];
+    if (self.mPlayer) {
+        [self.mPlayer play];
+    }
+    
 }
 
-- (void)stop{
-    [self.mPlayer pause];
-    //    self.playerItem = nil;
-    //
-    //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
-    //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
-    //    [self.mPlayer removeObserver:self forKeyPath:@"rate" context:nil];
-    //
-    //    [[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)stopWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
     
+    if (![urlStr isEqualToString:self.loader.url]) {
+        return;
+    }
+    
+    if (self.mPlayer) {
+        
+        [self.mPlayer pause];
+        
+//        AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
+//        [asset.resourceLoader setDelegate:nil queue:dispatch_get_main_queue()];
+//
+//        [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
+//        [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+//        [self.mPlayer removeObserver:self forKeyPath:@"rate" context:nil];
+//
+//        [[NSNotificationCenter defaultCenter] removeObserver:self];
+//
+////        [self.playerLayer removeFromSuperlayer];
+////        self.playerLayer = nil;
+//        self.playerItem = nil;
+//        self.loader = nil;
+//        self.mPlayer = nil;
+    }
+   
 }
 
 - (AVPlayerLayer *)playerLayer{
@@ -153,8 +174,6 @@
     [self.mPlayer seekToTime:CMTimeMake(0, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         [self.mPlayer play];
     }];
-    
-    
 }
 
 - (NSTimeInterval)p_availableDuration {

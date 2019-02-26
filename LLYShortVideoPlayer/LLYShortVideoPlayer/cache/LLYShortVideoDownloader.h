@@ -16,8 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 
 - (void)downloadWithUrl:(NSURL *)url
-          progressBlock:(LLYShortVideoDownloadProgressBlock)progressBlock
-        completionBlock:(LLYShortVideoDownloadCompletionBlock)completionBlock;
+          progressBlock:(nullable LLYShortVideoDownloadProgressBlock)progressBlock
+        completionBlock:(nullable LLYShortVideoDownloadCompletionBlock)completionBlock;
 
 @end
 

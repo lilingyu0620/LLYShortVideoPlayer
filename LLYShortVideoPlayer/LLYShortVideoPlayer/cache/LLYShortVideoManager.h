@@ -18,6 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
                progress:(LLYShortVideoDownloadProgressBlock)progress
              completion:(LLYShortVideoDownloadCompletionBlock)completion;
 
+- (void)preloadVideoWithArray:(NSArray<NSURL *> *)urlArray;
+
+- (NSData *)cacheDataFromOffset:(NSUInteger)offset
+                         length:(NSUInteger)length
+                        withUrl:(NSURL *)url;
+
+- (BOOL)isCacheCompletedWithUrl:(NSURL *)url;
+
+- (NSURL *)finalFilePathWithName:(NSURL *)fileUrl;
+
 @end
 
 NS_ASSUME_NONNULL_END

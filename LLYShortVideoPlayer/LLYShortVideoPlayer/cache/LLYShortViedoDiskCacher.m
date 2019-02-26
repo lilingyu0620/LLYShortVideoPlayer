@@ -178,8 +178,8 @@ static NSString * const kTempDirectoryName = @"ShortVideoTemp";
     NSError *error = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-//    [fileManager moveItemAtPath:tempFilePath toPath:finalFilePath error:&error];
-    [fileManager copyItemAtPath:tempFilePath toPath:finalFilePath error:&error];
+    [fileManager moveItemAtPath:tempFilePath toPath:finalFilePath error:&error];
+//    [fileManager copyItemAtPath:tempFilePath toPath:finalFilePath error:&error];
     
     if (!error) {
         [self.fileHandleDic removeObjectForKey:fileName];

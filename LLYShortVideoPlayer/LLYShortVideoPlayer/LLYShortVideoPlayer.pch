@@ -11,12 +11,15 @@
 
 #import <UIKit/UIKit.h>
 #import <AFNetworking.h>
-#import "LLYShortVideoCacher.h"
 
 #define OCWidth ([UIScreen mainScreen].bounds.size.width)
 #define OCHeight ([UIScreen mainScreen].bounds.size.height)
 
 typedef void(^LLYShortVideoDownloadProgressBlock)(NSInteger receivedSize, NSInteger expectedSize,NSData *data);
 typedef void(^LLYShortVideoDownloadCompletionBlock)(NSError *error);
+
+#import "LLYShortVideoCacher.h"
+#import "LLYShortVideoManager.h"
+
 
 #endif /* LLYShortVideoPlayer_pch */

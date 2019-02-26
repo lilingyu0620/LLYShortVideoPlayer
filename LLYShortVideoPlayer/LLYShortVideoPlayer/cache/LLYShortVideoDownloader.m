@@ -9,10 +9,15 @@
 #import "LLYShortVideoDownloader.h"
 #import "LLYShortVideoCacher.h"
 
+#define Lock() dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER)
+#define UnLock() dispatch_semaphore_signal(self.lock)
+
 @interface LLYShortVideoDownloader ()
 
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) NSMutableDictionary *operationDic;
+
+@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 
@@ -34,15 +39,17 @@
     self = [super init];
     if (self) {
         self.queue = [[NSOperationQueue alloc]init];
+        self.queue.maxConcurrentOperationCount = 1;
         self.operationDic = [NSMutableDictionary dictionary];
+        self.lock = dispatch_semaphore_create(1);
     }
     return self;
     
 }
 
 - (void)downloadWithUrl:(NSURL *)url
-              progressBlock:(LLYShortVideoDownloadProgressBlock)progressBlock
-            completionBlock:(LLYShortVideoDownloadCompletionBlock)completionBlock{
+              progressBlock:(nullable LLYShortVideoDownloadProgressBlock)progressBlock
+            completionBlock:(nullable LLYShortVideoDownloadCompletionBlock)completionBlock{
     
     //已缓存
     if ([[LLYShortVideoCacher shareInstance] isCacheCompletedWithUrl:url]) {
@@ -66,19 +73,26 @@
     request.HTTPShouldHandleCookies = NO;
     request.HTTPShouldUsePipelining = YES;
     
-    LLYShortVideoDownloadOperation *operation = [[LLYShortVideoDownloadOperation alloc]initWithRequest:request progressBlock:^(NSInteger receivedSize, NSInteger expectedSize, NSData *data) {
-        [[LLYShortVideoCacher shareInstance] appendWithData:data fileUrl:request.URL];
-        
+    LLYShortVideoDownloadOperation *operation = [[LLYShortVideoDownloadOperation alloc]initWithRequest:request progressBlock:^(NSInteger receivedSize, NSInteger expectedSize, NSData *data) {        
         if (progressBlock) {
-            progressBlock(receivedSize,expectedSize,data);
+            progressBlock(receivedSize+tempSize,expectedSize,data);
         }
     } completionBlock:^(NSError *error) {
+        
+        Lock();
+        [self.operationDic removeObjectForKey:url];
+        UnLock();
         
         if (completionBlock) {
             completionBlock(error);
         }
         
     }];
+    
+    Lock();
+    self.operationDic[url] = operation;
+    UnLock();
+    
     [self.queue addOperation:operation];    
 }
 
@@ -88,11 +102,13 @@
         return;
     }
     
+    Lock();
     LLYShortVideoDownloadOperation *operation = self.operationDic[url];
     if (operation) {
         [operation cancel];
         [self.operationDic removeObjectForKey:url];
     }
+    UnLock();
     
 }
 
