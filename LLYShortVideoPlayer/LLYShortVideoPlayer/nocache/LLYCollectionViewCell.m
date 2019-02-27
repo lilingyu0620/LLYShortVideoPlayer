@@ -7,14 +7,10 @@
 //
 
 #import "LLYCollectionViewCell.h"
-#import <AVFoundation/AVFoundation.h>
 #import <Masonry.h>
+#import "LLYShortVideoPreloadManager.h"
 
 @interface LLYCollectionViewCell ()
-
-@property (nonatomic, strong) AVPlayer *mPlayer;
-@property (nonatomic, strong) AVPlayerItem *playerItem;
-@property (nonatomic, strong) AVPlayerLayer *playerLayer;
 
 @property (nonatomic, assign) CGFloat preparePlayTime;
 @property (nonatomic, assign) CGFloat startPlayTime;
@@ -52,12 +48,14 @@
 
 
 - (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
-    
+        
     self.curIdx = idx;
+    self.url = urlStr;
     
-    self.playerItem = [[AVPlayerItem alloc]initWithURL:[NSURL URLWithString:urlStr]];
-    self.mPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];
-    self.playerLayer.player = self.mPlayer;
+    [[LLYShortVideoPreloadManager sharedInstance] addCell:self];
+}
+
+- (void)addObs{
     
     if (self.mPlayer.currentItem) {
         
@@ -66,11 +64,14 @@
         [self.mPlayer.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionPrior context:nil];
         [self.mPlayer.currentItem  addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
         [self.mPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:nil];//监听状态。播放还是暂停或者其他
+        [self.mPlayer.currentItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.mPlayer.currentItem];
     }
     
     self.preparePlayTime = CFAbsoluteTimeGetCurrent();
-//    NSLog(@"preparePlayTime = %f",self.preparePlayTime);
+    //    NSLog(@"preparePlayTime = %f",self.preparePlayTime);
+    
 }
 
 - (void)play{
@@ -128,8 +129,19 @@
     }
     
     if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
-//        NSTimeInterval timeInterval = [self p_availableDuration];// 计算缓冲进度
-//        NSLog(@"timeInterval = %f",timeInterval);
+        NSTimeInterval timeInterval = [self p_availableDuration];// 计算缓冲进度
+        NSLog(@"index = %ld timeInterval = %f",(long)self.curIdx,timeInterval);
+        CMTime time = self.playerItem.duration;
+        CGFloat total = CMTimeGetSeconds(time);
+        NSLog(@"总时长:%f",total);
+        NSInteger curProgress = timeInterval;
+        NSInteger totalTime = total;
+        
+        if (totalTime == curProgress) {
+            if (self.loadCompletedBlock) {
+                self.loadCompletedBlock();
+            }
+        }
     }
     
     if ([keyPath isEqualToString:@"rate"])  {//速率为0时候，是暂停或者停止，速率为1，是正在播放
@@ -141,6 +153,14 @@
 //            NSLog(@"播放速度变为0");
         }
         
+    }
+    
+    if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
+        
+        NSLog(@"缓冲达到可播放程度了");
+        
+        //由于 AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
+        [self.mPlayer play];
     }
 }
 

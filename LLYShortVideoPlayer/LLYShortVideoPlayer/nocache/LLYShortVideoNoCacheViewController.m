@@ -66,8 +66,12 @@
 }
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
+    NSInteger idx = indexPath.row % 5;
+    NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%ld",idx];
     LLYCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LLYCollectionViewCell" forIndexPath:indexPath];
+    
     [cell configWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
+    
     return cell;
 }
 
@@ -139,6 +143,12 @@
         _mCollectionView.pagingEnabled = YES;
         
         [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:@"LLYCollectionViewCell"];
+        
+//        for (int i = 0; i < 5; i++) {
+//            NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%d",i];
+//            [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:@"LLYCollectionViewCell"];
+//        }
+
     }
     return _mCollectionView;
 }
