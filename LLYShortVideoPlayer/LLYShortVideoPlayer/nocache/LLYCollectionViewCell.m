@@ -34,9 +34,7 @@
 }
 
 - (void)initUI{
-    
-    [self.contentView.layer addSublayer:self.playerLayer];
-    
+        
     [self.contentView addSubview:self.startTimeLabel];
     [self.startTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(OCWidth, 30));
@@ -80,13 +78,19 @@
 }
 
 - (void)stop{
+    
     [self.mPlayer pause];
-//    self.playerItem = nil;
-//
+    self.preloading = YES;
+
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
 //    [self.mPlayer removeObserver:self forKeyPath:@"rate" context:nil];
 //
+//    self.playerItem = nil;
+//    self.mPlayer = nil;
+//    [self.playerLayer removeFromSuperlayer];
+//    self.playerLayer = nil;
+
 //    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
@@ -138,9 +142,7 @@
         NSInteger totalTime = total;
         
         if (totalTime == curProgress) {
-            if (self.loadCompletedBlock) {
-                self.loadCompletedBlock();
-            }
+           
         }
     }
     
@@ -159,8 +161,18 @@
         
         NSLog(@"缓冲达到可播放程度了");
         
+        if (self.loadCompletedBlock) {
+            self.loadCompletedBlock();
+        }
+        
         //由于 AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
-        [self.mPlayer play];
+        if (!self.preloading) {
+             [self.mPlayer play];
+        }
+        else{
+            [self.mPlayer pause];
+        }
+        
     }
 }
 

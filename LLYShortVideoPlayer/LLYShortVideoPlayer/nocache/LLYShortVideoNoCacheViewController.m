@@ -68,8 +68,8 @@
     
     NSInteger idx = indexPath.row % 5;
     NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%ld",idx];
-    LLYCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LLYCollectionViewCell" forIndexPath:indexPath];
-    
+    LLYCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.preloading = YES;
     [cell configWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
     
     return cell;
@@ -78,10 +78,10 @@
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    [((LLYCollectionViewCell *)cell) stop];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -112,12 +112,11 @@
     NSInteger yIdx = contentOffsetPt.y / OCHeight;
     self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:yIdx inSection:0]];
     //    NSLog(@"curVisibleCell = %@",self.curVisibleCell);
-    
-    if (self.lastVisibleCell != self.curVisibleCell) {
-        [self.lastVisibleCell stop];
-        [self.curVisibleCell play];
+    self.curVisibleCell.preloading = NO;
+    if (!self.curVisibleCell.mPlayer) {
+        [self.curVisibleCell configWithUrl:self.dataSourceArray[yIdx] idx:yIdx];
     }
-    
+    [self.curVisibleCell play];
 }
 
 #pragma mark - Status Bar
@@ -142,12 +141,12 @@
         _mCollectionView.backgroundColor = [UIColor whiteColor];
         _mCollectionView.pagingEnabled = YES;
         
-        [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:@"LLYCollectionViewCell"];
+//        [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:@"LLYCollectionViewCell"];
         
-//        for (int i = 0; i < 5; i++) {
-//            NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%d",i];
-//            [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:@"LLYCollectionViewCell"];
-//        }
+        for (int i = 0; i < 5; i++) {
+            NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%d",i];
+            [_mCollectionView registerClass:[LLYCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+        }
 
     }
     return _mCollectionView;
@@ -187,6 +186,7 @@
 - (void)p_startPlayer{
     
     self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    self.curVisibleCell.preloading = NO;
     [self.curVisibleCell play];
     
 }

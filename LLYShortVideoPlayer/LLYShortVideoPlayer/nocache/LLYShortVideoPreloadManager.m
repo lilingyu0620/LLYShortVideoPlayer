@@ -42,7 +42,10 @@
 
 - (void)addCell:(LLYCollectionViewCell *)cell{
     
-    [self.cellArray addObject:cell];
+    if (NSNotFound == [self.cellArray indexOfObject:cell]) {
+        [self.cellArray addObject:cell];
+    }
+    
     [self preload];
 }
 
@@ -56,6 +59,8 @@
     cell.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:cell.url]];
     cell.mPlayer = [AVPlayer playerWithPlayerItem:cell.playerItem];
     cell.playerLayer.player = cell.mPlayer;
+    [cell.contentView.layer addSublayer:cell.playerLayer];
+    
     [cell addObs];
     
     self.isLoading = YES;
@@ -66,8 +71,9 @@
         
         weakSelf.isLoading = NO;
         [weakSelf.cellArray removeObject:weakCell];
-        
-        [weakSelf preload];
+        if (weakSelf.cellArray.count > 0) {
+            [weakSelf preload];
+        }
     };
     
 }

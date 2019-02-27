@@ -15,10 +15,12 @@ typedef void(^VideoLoadCompleted)(void);
 
 @interface LLYCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) AVPlayer *mPlayer;
-@property (nonatomic, strong) AVPlayerLayer *playerLayer;
-@property (nonatomic, strong) AVPlayerItem *playerItem;
+@property (nonatomic, strong,nullable) AVPlayer *mPlayer;
+@property (nonatomic, strong,nullable) AVPlayerLayer *playerLayer;
+@property (nonatomic, strong,nullable) AVPlayerItem *playerItem;
 @property (nonatomic, copy) NSString *url;
+
+@property (nonatomic, assign) BOOL preloading;
 
 @property (nonatomic, copy) VideoLoadCompleted loadCompletedBlock;
 
