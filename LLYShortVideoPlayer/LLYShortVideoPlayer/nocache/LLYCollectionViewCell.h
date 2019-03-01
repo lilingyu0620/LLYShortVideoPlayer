@@ -22,6 +22,10 @@ typedef void(^VideoLoadCompleted)(void);
 
 @property (nonatomic, assign) BOOL preloading;
 
+//已预加载未播放 不需要重复加载
+@property (nonatomic, assign) BOOL hasPlay;
+@property (nonatomic, assign) BOOL hasPreloaded;
+
 @property (nonatomic, copy) VideoLoadCompleted loadCompletedBlock;
 
 - (void)stop;

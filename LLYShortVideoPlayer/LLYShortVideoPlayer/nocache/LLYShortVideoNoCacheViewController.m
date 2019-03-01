@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) UIButton *backBtn;
 
+@property (nonatomic, strong) NSMutableDictionary *cellDic;
+
 @end
 
 @implementation LLYShortVideoNoCacheViewController
@@ -29,6 +31,12 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     [self initUI];
+    
+//    for (int i = 0; i < 5; i++) {
+//        NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%d",i];
+//        LLYCollectionViewCell *cell = [self.mCollectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+//        self.cellDic[@(i)] = cell;
+//    }
     
 }
 
@@ -70,8 +78,14 @@
     NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%ld",idx];
     LLYCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.preloading = YES;
+    cell.hasPlay = NO;
+    cell.hasPreloaded = NO;
     [cell configWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
     
+    LLYCollectionViewCell *cacheCell = [self.cellDic objectForKey:@(idx)];
+    if (!cacheCell) {
+        self.cellDic[@(idx)] = cell;
+    }
     return cell;
 }
 
@@ -81,7 +95,12 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    [((LLYCollectionViewCell *)cell) stop];
+    
+    LLYCollectionViewCell *dismissCell = (LLYCollectionViewCell *)cell;
+    if (dismissCell.hasPlay) {
+        [dismissCell stop];
+    }
+    
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -113,10 +132,59 @@
     self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:yIdx inSection:0]];
     //    NSLog(@"curVisibleCell = %@",self.curVisibleCell);
     self.curVisibleCell.preloading = NO;
-    if (!self.curVisibleCell.mPlayer) {
-        [self.curVisibleCell configWithUrl:self.dataSourceArray[yIdx] idx:yIdx];
-    }
+    self.curVisibleCell.hasPreloaded = NO;
+    self.curVisibleCell.hasPlay = YES;
+    
     [self.curVisibleCell play];
+    
+    [self preloadWithCurIdx:yIdx];
+}
+
+- (void)preloadWithCurIdx:(NSInteger)idx{
+    
+    if (idx < self.dataSourceArray.count - 1) {
+        NSInteger preloadIdx = (idx + 1) % 5;
+        LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
+        if (preloadCell) {
+            preloadCell.preloading = YES;
+            preloadCell.hasPlay = NO;
+            preloadCell.hasPreloaded = NO;
+            [preloadCell configWithUrl:self.dataSourceArray[idx + 1] idx:idx + 1];
+        }
+    }
+
+    if (idx > 0) {
+        NSInteger preloadIdx = (idx-1) % 5;
+        LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
+        if (preloadCell) {
+            preloadCell.preloading = YES;
+            preloadCell.hasPlay = NO;
+            preloadCell.hasPreloaded = NO;
+            [preloadCell configWithUrl:self.dataSourceArray[idx-1] idx:idx-1];
+        }
+    }
+    
+    if (idx < self.dataSourceArray.count - 2) {
+        NSInteger preloadIdx = (idx + 2) % 5;
+        LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
+        if (preloadCell) {
+            preloadCell.preloading = YES;
+            preloadCell.hasPlay = NO;
+            preloadCell.hasPreloaded = NO;
+            [preloadCell configWithUrl:self.dataSourceArray[idx + 2] idx:idx + 2];
+        }
+    }
+
+    if (idx > 1) {
+        NSInteger preloadIdx = (idx-2) % 5;
+        LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
+        if (preloadCell) {
+            preloadCell.preloading = YES;
+            preloadCell.hasPlay = NO;
+            preloadCell.hasPreloaded = NO;
+            [preloadCell configWithUrl:self.dataSourceArray[idx-2] idx:idx-2];
+        }
+    }
 }
 
 #pragma mark - Status Bar
@@ -181,14 +249,23 @@
     return _backBtn;
 }
 
+- (NSMutableDictionary *)cellDic{
+    if (!_cellDic) {
+        _cellDic = [NSMutableDictionary dictionary];
+    }
+    return _cellDic;
+}
+
 #pragma mark - Private Method
 
 - (void)p_startPlayer{
     
     self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     self.curVisibleCell.preloading = NO;
+    [self.curVisibleCell configWithUrl:self.dataSourceArray[0] idx:0];
     [self.curVisibleCell play];
     
+    [self preloadWithCurIdx:0];
 }
 
 - (void)backBtnClicked:(id)sender{

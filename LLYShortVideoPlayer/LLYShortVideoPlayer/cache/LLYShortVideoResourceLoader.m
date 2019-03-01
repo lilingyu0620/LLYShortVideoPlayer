@@ -59,7 +59,7 @@
 #pragma mark - Private Method
 
 - (NSURL *)unRecognizerUrl {
-    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[NSURL URLWithString:@"www.open.163.top"] resolvingAgainstBaseURL:NO];
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[NSURL URLWithString:@"www.open.163.com"] resolvingAgainstBaseURL:NO];
     components.scheme = @"opencourse";
     return [components URL];
 }

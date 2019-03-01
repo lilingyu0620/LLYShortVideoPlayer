@@ -56,6 +56,11 @@
     }
     
     LLYCollectionViewCell *cell = self.cellArray.firstObject;
+//    if (cell.hasPreloaded && !cell.hasPlay && !cell.preloading) {
+//        [self.cellArray removeObject:cell];
+//        return;
+//    }
+    
     cell.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:cell.url]];
     cell.mPlayer = [AVPlayer playerWithPlayerItem:cell.playerItem];
     cell.playerLayer.player = cell.mPlayer;
@@ -70,7 +75,9 @@
     cell.loadCompletedBlock = ^{
         
         weakSelf.isLoading = NO;
+        
         [weakSelf.cellArray removeObject:weakCell];
+        
         if (weakSelf.cellArray.count > 0) {
             [weakSelf preload];
         }

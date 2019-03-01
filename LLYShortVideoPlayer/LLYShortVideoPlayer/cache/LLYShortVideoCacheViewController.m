@@ -192,12 +192,20 @@
 
     NSMutableArray *preArray = [NSMutableArray array];
     
-    if (idx > 0) {
-        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx-1]]];
-    }
+//    if (idx > 0) {
+//        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx-1]]];
+//    }
     
     if (idx < self.dataSourceArray.count - 1) {
         [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx +1]]];
+    }
+    
+    if (idx < self.dataSourceArray.count - 2) {
+        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx +2]]];
+    }
+    
+    if (idx < self.dataSourceArray.count - 3) {
+        [preArray addObject:[NSURL URLWithString:self.dataSourceArray[idx +3]]];
     }
     
     return preArray;

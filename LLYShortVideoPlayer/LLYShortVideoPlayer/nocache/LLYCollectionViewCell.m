@@ -75,12 +75,15 @@
 - (void)play{
     
     [self.mPlayer play];
+    self.hasPlay = YES;
 }
 
 - (void)stop{
     
     [self.mPlayer pause];
     self.preloading = YES;
+    self.hasPreloaded = NO;
+    self.hasPlay = NO;
 
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
@@ -90,7 +93,7 @@
 //    self.mPlayer = nil;
 //    [self.playerLayer removeFromSuperlayer];
 //    self.playerLayer = nil;
-
+//
 //    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
@@ -141,8 +144,13 @@
         NSInteger curProgress = timeInterval;
         NSInteger totalTime = total;
         
-        if (totalTime == curProgress) {
-           
+        if (curProgress >= totalTime/2 && !self.hasPreloaded) {
+            
+            self.hasPreloaded = YES;
+
+            if (self.loadCompletedBlock) {
+                self.loadCompletedBlock();
+            }
         }
     }
     
@@ -160,10 +168,6 @@
     if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
         
         NSLog(@"缓冲达到可播放程度了");
-        
-        if (self.loadCompletedBlock) {
-            self.loadCompletedBlock();
-        }
         
         //由于 AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
         if (!self.preloading) {
