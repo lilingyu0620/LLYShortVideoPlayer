@@ -43,6 +43,7 @@
 - (void)removeCells{
     
     [self.cellArray removeAllObjects];
+    self.isLoading = NO;
     
 }
 
@@ -62,21 +63,11 @@
     }
     
     LLYCollectionViewCell *cell = self.cellArray.firstObject;
-//    if (cell.hasPreloaded && !cell.hasPlay && !cell.preloading) {
-//        [self.cellArray removeObject:cell];
-//        return;
-//    }
-    
-    //已缓存不在重复
-//    if (cell.hasPlayed && cell.hasPreloaded) {
-//        [self.cellArray removeObject:cell];
-//        return;
-//    }
-    
     cell.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:cell.url]];
     cell.mPlayer = [AVPlayer playerWithPlayerItem:cell.playerItem];
     cell.playerLayer.player = cell.mPlayer;
     [cell.contentView.layer addSublayer:cell.playerLayer];
+    cell.hasPreloaded = YES;
     
     [cell addObs];
     

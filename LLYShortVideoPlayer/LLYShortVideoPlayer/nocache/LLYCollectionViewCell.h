@@ -28,7 +28,7 @@ typedef void(^VideoLoadCompleted)(void);
 
 - (void)stop;
 - (void)play;
-- (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
+- (void)loadWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
 
 - (void)addObs;
 

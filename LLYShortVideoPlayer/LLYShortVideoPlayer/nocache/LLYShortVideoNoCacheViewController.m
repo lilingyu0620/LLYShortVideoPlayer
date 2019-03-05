@@ -84,7 +84,7 @@ static NSInteger const kPreloadCount = 7;
     LLYCollectionViewCell *cacheCell = [self.cellDic objectForKey:@(idx)];
     if (!cacheCell) {
         self.cellDic[@(idx)] = cell;
-        [cell configWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
+        [cell loadWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
     }
     else{
         cell = cacheCell;
@@ -101,9 +101,7 @@ static NSInteger const kPreloadCount = 7;
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     
     LLYCollectionViewCell *dismissCell = (LLYCollectionViewCell *)cell;
-    if (dismissCell.hasPlayed) {
-        [dismissCell stop];
-    }
+    [dismissCell stop];
     
 }
 
@@ -158,7 +156,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx + 1) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx + 1] idx:idx + 1];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx + 1] idx:idx + 1];
         }
     }
 
@@ -166,7 +164,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-1) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx-1] idx:idx-1];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx-1] idx:idx-1];
         }
     }
     
@@ -174,7 +172,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx + 2) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx + 2] idx:idx + 2];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx + 2] idx:idx + 2];
         }
     }
 
@@ -182,7 +180,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-2) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx-2] idx:idx-2];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx-2] idx:idx-2];
         }
     }
     
@@ -190,7 +188,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx + 3) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx + 3] idx:idx + 3];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx + 3] idx:idx + 3];
         }
     }
 
@@ -198,7 +196,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-3) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
-            [preloadCell configWithUrl:self.dataSourceArray[idx-3] idx:idx-3];
+            [preloadCell loadWithUrl:self.dataSourceArray[idx-3] idx:idx-3];
         }
     }
 }
@@ -277,7 +275,7 @@ static NSInteger const kPreloadCount = 7;
 - (void)p_startPlayer{
     
     self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [self.curVisibleCell configWithUrl:self.dataSourceArray[0] idx:0];
+    [self.curVisibleCell loadWithUrl:self.dataSourceArray[0] idx:0];
     [self.curVisibleCell play];
     
     [self preloadWithCurIdx:0];

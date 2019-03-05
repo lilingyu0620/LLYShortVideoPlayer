@@ -49,9 +49,9 @@
 }
 
 
-- (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
+- (void)loadWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
     
-    if (self.curIdx == idx && self.hasPreloaded) {
+    if (self.curIdx == idx && self.playerItem) {
         return;
     }
     
@@ -156,7 +156,7 @@
         NSInteger curProgress = timeInterval;
         NSInteger totalTime = total;
         
-        if (curProgress >= totalTime/2 && !self.hasPreloaded) {
+        if (curProgress >= 5 && !self.hasPreloaded) {
             
 //            NSLog(@"curindex = %ld",self.curIdx);
             
