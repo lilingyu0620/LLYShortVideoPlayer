@@ -20,10 +20,8 @@ typedef void(^VideoLoadCompleted)(void);
 @property (nonatomic, strong,nullable) AVPlayerItem *playerItem;
 @property (nonatomic, copy) NSString *url;
 
-@property (nonatomic, assign) BOOL preloading;
-
-//已预加载未播放 不需要重复加载
-@property (nonatomic, assign) BOOL hasPlay;
+//未缓存未播放 未缓存已播放 已缓存已播放 已缓存未播放
+@property (nonatomic, assign) BOOL hasPlayed;
 @property (nonatomic, assign) BOOL hasPreloaded;
 
 @property (nonatomic, copy) VideoLoadCompleted loadCompletedBlock;

@@ -40,6 +40,12 @@
     
 }
 
+- (void)removeCells{
+    
+    [self.cellArray removeAllObjects];
+    
+}
+
 - (void)addCell:(LLYCollectionViewCell *)cell{
     
     if (NSNotFound == [self.cellArray indexOfObject:cell]) {
@@ -57,6 +63,12 @@
     
     LLYCollectionViewCell *cell = self.cellArray.firstObject;
 //    if (cell.hasPreloaded && !cell.hasPlay && !cell.preloading) {
+//        [self.cellArray removeObject:cell];
+//        return;
+//    }
+    
+    //已缓存不在重复
+//    if (cell.hasPlayed && cell.hasPreloaded) {
 //        [self.cellArray removeObject:cell];
 //        return;
 //    }

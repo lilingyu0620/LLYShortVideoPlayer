@@ -28,6 +28,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self initUI];
+        
+        self.curIdx = -1;
+        self.hasPlayed = NO;
+        self.hasPreloaded = NO;
     }
     return self;
     
@@ -46,9 +50,17 @@
 
 
 - (void)configWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
-        
+    
+    if (self.curIdx == idx && self.hasPreloaded) {
+        return;
+    }
+    
+    NSLog(@"lastindex = %ld,curindex = %ld",self.curIdx,idx);
+    
     self.curIdx = idx;
     self.url = urlStr;
+    self.hasPreloaded = NO;
+    self.hasPlayed = NO;
     
     [[LLYShortVideoPreloadManager sharedInstance] addCell:self];
 }
@@ -75,15 +87,15 @@
 - (void)play{
     
     [self.mPlayer play];
-    self.hasPlay = YES;
+    self.hasPlayed = YES;
 }
 
 - (void)stop{
     
     [self.mPlayer pause];
-    self.preloading = YES;
+    
     self.hasPreloaded = NO;
-    self.hasPlay = NO;
+    self.hasPlayed = NO;
 
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
 //    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
@@ -137,14 +149,16 @@
     
     if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
         NSTimeInterval timeInterval = [self p_availableDuration];// 计算缓冲进度
-        NSLog(@"index = %ld timeInterval = %f",(long)self.curIdx,timeInterval);
+//        NSLog(@"index = %ld timeInterval = %f",(long)self.curIdx,timeInterval);
         CMTime time = self.playerItem.duration;
         CGFloat total = CMTimeGetSeconds(time);
-        NSLog(@"总时长:%f",total);
+//        NSLog(@"总时长:%f",total);
         NSInteger curProgress = timeInterval;
         NSInteger totalTime = total;
         
         if (curProgress >= totalTime/2 && !self.hasPreloaded) {
+            
+//            NSLog(@"curindex = %ld",self.curIdx);
             
             self.hasPreloaded = YES;
 
@@ -167,10 +181,10 @@
     
     if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
         
-        NSLog(@"缓冲达到可播放程度了");
+//        NSLog(@"缓冲达到可播放程度了");
         
         //由于 AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
-        if (!self.preloading) {
+        if (self.hasPlayed) {
              [self.mPlayer play];
         }
         else{

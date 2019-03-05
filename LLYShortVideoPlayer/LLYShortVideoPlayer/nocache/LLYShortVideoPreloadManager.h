@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addCell:(LLYCollectionViewCell *)cell;
 
+- (void)removeCells;
+
 @end
 
 NS_ASSUME_NONNULL_END
