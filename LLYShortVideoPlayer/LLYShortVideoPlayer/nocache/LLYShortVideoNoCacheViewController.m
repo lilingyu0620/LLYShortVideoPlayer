@@ -80,7 +80,6 @@ static NSInteger const kPreloadCount = 7;
     NSInteger idx = indexPath.row % kPreloadCount;
     NSString *reuseIdentifier = [NSString stringWithFormat:@"LLYCollectionViewCell_%ld",idx];
     LLYCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
     LLYCollectionViewCell *cacheCell = [self.cellDic objectForKey:@(idx)];
     if (!cacheCell) {
         self.cellDic[@(idx)] = cell;
@@ -96,6 +95,15 @@ static NSInteger const kPreloadCount = 7;
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    NSInteger idx = indexPath.row % kPreloadCount;
+    LLYCollectionViewCell *curCell = [self.cellDic objectForKey:@(idx)];
+    if (curCell) {
+//        [curCell reset];
+        curCell.hasPlayed = YES;
+        [curCell loadWithUrl:self.dataSourceArray[indexPath.row] idx:indexPath.row];
+    }
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -124,6 +132,14 @@ static NSInteger const kPreloadCount = 7;
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 //    NSLog(@"%s",__func__);
     
+    CGPoint contentOffsetPt = self.mCollectionView.contentOffset;
+    NSInteger yIdx = contentOffsetPt.y / OCHeight;
+//    self.curVisibleCell = (LLYCollectionViewCell *)[self.mCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:yIdx inSection:0]];
+//    //    NSLog(@"curVisibleCell = %@",self.curVisibleCell);
+//    [self.curVisibleCell play];
+    
+//    [self preloadWithCurIdx:yIdx];
+    
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
@@ -146,16 +162,19 @@ static NSInteger const kPreloadCount = 7;
     
     [[LLYShortVideoPreloadManager sharedInstance] removeCells];
     
-//    NSInteger curIdx = idx % kPreloadCount;
-//    LLYCollectionViewCell *curCell = [self.cellDic objectForKey:@(curIdx)];
-//    if (curCell) {
-//        [curCell configWithUrl:self.dataSourceArray[idx] idx:idx];
-//    }
+    NSInteger curIdx = idx % kPreloadCount;
+    LLYCollectionViewCell *curCell = [self.cellDic objectForKey:@(curIdx)];
+    if (curCell) {
+        curCell.hasPlayed = YES;
+        [curCell loadWithUrl:self.dataSourceArray[idx] idx:idx];
+    }
     
     if (idx < self.dataSourceArray.count - 1) {
         NSInteger preloadIdx = (idx + 1) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+//            [preloadCell stop];
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx + 1] idx:idx + 1];
         }
     }
@@ -164,14 +183,20 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-1) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+//            [preloadCell stop];
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx-1] idx:idx-1];
         }
     }
     
+    
+    
+
     if (idx < self.dataSourceArray.count - 2) {
         NSInteger preloadIdx = (idx + 2) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx + 2] idx:idx + 2];
         }
     }
@@ -180,14 +205,16 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-2) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx-2] idx:idx-2];
         }
     }
-    
+
     if (idx < self.dataSourceArray.count - 3) {
         NSInteger preloadIdx = (idx + 3) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx + 3] idx:idx + 3];
         }
     }
@@ -196,6 +223,7 @@ static NSInteger const kPreloadCount = 7;
         NSInteger preloadIdx = (idx-3) % kPreloadCount;
         LLYCollectionViewCell *preloadCell = [self.cellDic objectForKey:@(preloadIdx)];
         if (preloadCell) {
+            preloadCell.hasPlayed = NO;
             [preloadCell loadWithUrl:self.dataSourceArray[idx-3] idx:idx-3];
         }
     }

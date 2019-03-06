@@ -64,9 +64,19 @@
     
     LLYCollectionViewCell *cell = self.cellArray.firstObject;
     cell.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:cell.url]];
-    cell.mPlayer = [AVPlayer playerWithPlayerItem:cell.playerItem];
+    if (cell.mPlayer) {
+        [cell.mPlayer replaceCurrentItemWithPlayerItem:nil];
+        [cell.mPlayer replaceCurrentItemWithPlayerItem:cell.playerItem];
+    }
+    else{
+        cell.mPlayer = [AVPlayer playerWithPlayerItem:cell.playerItem];
+    }
     cell.playerLayer.player = cell.mPlayer;
     [cell.contentView.layer addSublayer:cell.playerLayer];
+
+//    if (![cell.contentView.layer.sublayers containsObject:cell.playerLayer]) {
+//        [cell.contentView.layer addSublayer:cell.playerLayer];
+//    }
     cell.hasPreloaded = YES;
     
     [cell addObs];

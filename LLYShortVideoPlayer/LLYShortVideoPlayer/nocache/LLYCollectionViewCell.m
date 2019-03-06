@@ -17,8 +17,6 @@
 
 @property (nonatomic, strong) UILabel *startTimeLabel;
 
-@property (nonatomic, assign) NSInteger curIdx;
-
 @end
 
 @implementation LLYCollectionViewCell
@@ -51,16 +49,15 @@
 
 - (void)loadWithUrl:(NSString *)urlStr idx:(NSInteger)idx{
     
-    if (self.curIdx == idx && self.playerItem) {
+    if (self.curIdx == idx && self.hasPreloaded) {
         return;
     }
-    
     NSLog(@"lastindex = %ld,curindex = %ld",self.curIdx,idx);
     
     self.curIdx = idx;
     self.url = urlStr;
     self.hasPreloaded = NO;
-    self.hasPlayed = NO;
+    [self.mPlayer replaceCurrentItemWithPlayerItem:nil];
     
     [[LLYShortVideoPreloadManager sharedInstance] addCell:self];
 }
@@ -93,21 +90,21 @@
 - (void)stop{
     
     [self.mPlayer pause];
+
+}
+
+- (void)reset{
     
-    self.hasPreloaded = NO;
-    self.hasPlayed = NO;
-
-//    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
-//    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
-//    [self.mPlayer removeObserver:self forKeyPath:@"rate" context:nil];
-//
-//    self.playerItem = nil;
-//    self.mPlayer = nil;
-//    [self.playerLayer removeFromSuperlayer];
-//    self.playerLayer = nil;
-//
-//    [[NSNotificationCenter defaultCenter] removeObserver:self];
-
+    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"status" context:nil];
+    [self.mPlayer.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+    [self.mPlayer removeObserver:self forKeyPath:@"rate" context:nil];
+    
+    self.playerItem = nil;
+    self.mPlayer = nil;
+    [self.playerLayer removeFromSuperlayer];
+    self.playerLayer = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (AVPlayerLayer *)playerLayer{
@@ -181,7 +178,7 @@
     
     if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
         
-//        NSLog(@"缓冲达到可播放程度了");
+        NSLog(@"缓冲达到可播放程度了");
         
         //由于 AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
         if (self.hasPlayed) {

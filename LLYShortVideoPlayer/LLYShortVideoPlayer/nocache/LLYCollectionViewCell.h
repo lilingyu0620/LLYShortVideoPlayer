@@ -20,6 +20,8 @@ typedef void(^VideoLoadCompleted)(void);
 @property (nonatomic, strong,nullable) AVPlayerItem *playerItem;
 @property (nonatomic, copy) NSString *url;
 
+@property (nonatomic, assign) NSInteger curIdx;
+
 //未缓存未播放 未缓存已播放 已缓存已播放 已缓存未播放
 @property (nonatomic, assign) BOOL hasPlayed;
 @property (nonatomic, assign) BOOL hasPreloaded;
@@ -29,8 +31,10 @@ typedef void(^VideoLoadCompleted)(void);
 - (void)stop;
 - (void)play;
 - (void)loadWithUrl:(NSString *)urlStr idx:(NSInteger)idx;
-
+- (void)reset;
 - (void)addObs;
+
+
 
 @end
 
